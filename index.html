@@ -1,46 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Chat App</title>
+  <title>Chat Dewa++</title>
   <style>
     body {
       font-family: Arial;
-      padding: 20px;
+      background: #e5ddd5;
+      margin: 0;
     }
+
+    h1 {
+      background: #075e54;
+      color: white;
+      padding: 15px;
+      margin: 0;
+      text-align: center;
+    }
+
     #chat {
-      margin-top: 10px;
-    }
-    li {
-      background: #e4e4e4;
-      padding: 8px;
-      margin: 5px 0;
-      border-radius: 8px;
       list-style: none;
+      padding: 10px;
+      height: 70vh;
+      overflow-y: auto;
+    }
+
+    li {
+      max-width: 70%;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      clear: both;
+    }
+
+    .me {
+      background: #dcf8c6;
+      float: right;
+    }
+
+    .bot {
+      background: white;
+      float: left;
+    }
+
+    .input-area {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      background: #fff;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      background: #075e54;
+      color: white;
+      border: none;
+      padding: 10px 20px;
     }
   </style>
 </head>
+
 <body>
 
-<h1>Chat App Sederhana</h1>
-
-<input type="text" id="msg" placeholder="Ketik pesan...">
-<button onclick="kirim()">Kirim</button>
+<h1>🤖 Chat Dewa++</h1>
 
 <ul id="chat"></ul>
 
+<div class="input-area">
+  <input type="text" id="msg" placeholder="Ketik pesan...">
+  <button onclick="kirim()">Kirim</button>
+</div>
+
 <script>
-function kirim() {
-  let pesan = document.getElementById("msg").value;
+  let chat = document.getElementById("chat");
 
-  if (pesan === "") return;
+  // ambil nama user
+  let nama = localStorage.getItem("nama");
+  if (!nama) {
+    nama = prompt("Masukkan nama kamu:");
+    localStorage.setItem("nama", nama);
+  }
 
-  let li = document.createElement("li");
-  li.innerText = pesan;
+  // load chat
+  let data = JSON.parse(localStorage.getItem("chat")) || [];
+  data.forEach(tampil);
 
-  document.getElementById("chat").appendChild(li);
+  function kirim() {
+    let input = document.getElementById("msg");
+    let pesan = input.value;
 
-  document.getElementById("msg").value = "";
-}
+    if (pesan.trim() === "") return;
+
+    let userMsg = {text: nama + ": " + pesan, me: true};
+    data.push(userMsg);
+    tampil(userMsg);
+
+    // bot balas otomatis
+    setTimeout(() => {
+      let balasan = jawabBot(pesan);
+      let botMsg = {text: "Bot: " + balasan, me: false};
+      data.push(botMsg);
+      tampil(botMsg);
+      simpan();
+    }, 800);
+
+    simpan();
+    input.value = "";
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function tampil(item) {
+    let li = document.createElement("li");
+    li.innerText = item.text;
+    li.className = item.me ? "me" : "bot";
+    chat.appendChild(li);
+  }
+
+  function simpan() {
+    localStorage.setItem("chat", JSON.stringify(data));
+  }
+
+  function jawabBot(pesan) {
+    pesan = pesan.toLowerCase();
+
+    if (pesan.includes("halo")) return "Halo juga 😄";
+    if (pesan.includes("nama")) return "Namaku Bot Dewa 🤖";
+    if (pesan.includes("apa kabar")) return "Aku baik, kamu gimana?";
+    if (pesan.includes("hai")) return "Hai juga!";
+    
+    return "Aku belum ngerti itu 😅";
+  }
+
+  // enter = kirim
+  document.getElementById("msg").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      kirim();
+    }
+  });
 </script>
 
 </body>
