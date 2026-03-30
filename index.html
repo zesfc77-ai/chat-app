@@ -2,6 +2,22 @@
 <html>
 <head>
   <title>Chat App</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    #chat {
+      margin-top: 10px;
+    }
+    li {
+      background: #e4e4e4;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 8px;
+      list-style: none;
+    }
+  </style>
 </head>
 <body>
 
@@ -15,9 +31,15 @@
 <script>
 function kirim() {
   let pesan = document.getElementById("msg").value;
+
+  if (pesan === "") return;
+
   let li = document.createElement("li");
   li.innerText = pesan;
+
   document.getElementById("chat").appendChild(li);
+
+  document.getElementById("msg").value = "";
 }
 </script>
 
