@@ -4,19 +4,22 @@
   <title>Chat App</title>
 </head>
 <body>
-  <h1>Chat App Sederhana</h1>
-  <input type="text" id="msg" placeholder="Ketik pesan...">
-  <button onclick="kirim()">Kirim</button>
 
-  <ul id="chat"></ul>
+<h1>Chat App Sederhana</h1>
 
-  <script>
-    function kirim() {
-      let pesan = document.getElementById("msg").value;
-      let li = document.createElement("li");
-      li.innerText = pesan;
-      document.getElementById("chat").appendChild(li);
-    }
-  </script>
+<input type="text" id="msg" placeholder="Ketik pesan...">
+<button onclick="kirim()">Kirim</button>
+
+<ul id="chat"></ul>
+
+<script>
+function kirim() {
+  let pesan = document.getElementById("msg").value;
+  let li = document.createElement("li");
+  li.innerText = pesan;
+  document.getElementById("chat").appendChild(li);
+}
+</script>
+
 </body>
 </html>
